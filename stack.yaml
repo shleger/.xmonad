@@ -1,6 +1,10 @@
 resolver: lts-16.26
 compiler: ghc-8.8.4
 
+# Thanks to: g
+# https://brianbuccola.com/how-to-install-xmonad-and-xmobar-via-stack/
+# https://quinoa42.github.io/en/oceanus/hie-and-xmonad/
+
 packages:
 - xmobar-git
 - xmonad-git
