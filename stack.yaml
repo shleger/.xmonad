@@ -1,0 +1,14 @@
+resolver: lts-16.26
+compiler: ghc-8.8.4
+
+packages:
+- xmobar-git
+- xmonad-git
+- xmonad-contrib-git
+
+extra-deps: []
+flags: {}
+extra-package-dbs: []
+
+
+

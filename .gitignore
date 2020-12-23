@@ -1,0 +1,7 @@
+.cabal
+.stack-work
+xmonad.errors
+xmonad.hi
+xmonad.o
+stack.yaml.lock
+xmonad-x86_64-linux
