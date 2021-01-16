@@ -10,6 +10,13 @@ packages:
 - xmonad-git
 - xmonad-contrib-git
 
+flags:
+ xmobar:
+   all_extensions: true
+   with_threaded: true
+   with_alsa: true
+   with_xft: true
+
 extra-deps: []
 flags: {}
 extra-package-dbs: []

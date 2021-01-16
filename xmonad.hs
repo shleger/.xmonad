@@ -2,12 +2,16 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Gaps
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Actions.CycleWS
+import XMonad.Actions.ShowText
+
 import System.IO
+import Graphics.X11.ExtraTypes.XF86
 
 
 -- NOTES: 0.10 works much better than 0.9, unfortunately distros mostly package 0.9 atm
@@ -23,13 +27,14 @@ import System.IO
 
 main = do
   xmproc <- spawnPipe "~/.local/bin/xmobar ~/.xmonad/.xmobarrc"
-  --xmproc <- spawnPipe "stalonetray"
+  stray  <- spawnPipe "killall -q stalonetray; sleep 0.5; stalonetray"
+  dunst  <- spawnPipe "killall -1 dunst; sleep 0.5; dunst -config ~/.config/i3/dunstrc.conf"
   xmonad $ defaultConfig {
     modMask = mod4Mask, 
     terminal = "kitty",
     manageHook = manageDocks <+> manageHook defaultConfig,
     layoutHook = avoidStruts $ layoutHook defaultConfig,
-    handleEventHook = mconcat [ docksEventHook, handleEventHook defaultConfig ],
+    handleEventHook = mconcat [ fullscreenEventHook, docksEventHook, handleEventHook defaultConfig ],
 
     logHook = dynamicLogWithPP $ xmobarPP
                         { ppOutput = hPutStrLn xmproc,
@@ -37,6 +42,11 @@ main = do
                         }
   } `additionalKeys`
     [ ((mod4Mask .|. shiftMask, xK_p), spawn "~/my/lockOut.sh"),
+      ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"),
+      ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"),
+      ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"),
+      ((mod4Mask, xK_F3),spawn "lightDown.sh"),
+      ((mod4Mask, xK_F4),  spawn "lightUp.sh"),
       ((mod4Mask .|. shiftMask, xK_s), spawn "flameshot gui"), 
       ((mod4Mask, xK_d), spawn "rofi -show run -lines 5 -opacity \"65\""),
       ((mod4Mask, xK_comma), toggleWS),
